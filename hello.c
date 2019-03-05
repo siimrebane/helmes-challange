@@ -75,6 +75,18 @@ int skipLetter(unsigned char c, int i, char* fileInMemoryi){
 	}
 }
 
+int isAnagram(int inputWord[256], int inputWordLength, unsigned char word[]){
+	int currentWord[256] = {0};
+	for(int i = 0; i < inputWordLength; i++){
+		if(inputWord[word[i]] > currentWord[word[i]]){
+			currentWord[word[i]]++;
+		} else {
+			return -1;
+		}
+	}
+	return 0;
+}
+
 int main(int argc, char* argv[]) {
 	clock_t begin = clock();
 
@@ -87,8 +99,6 @@ int main(int argc, char* argv[]) {
 	char resultString[2048];
 	int resultPointer;
 
-	// TODO
-	int firstLetters[256] = {0};
 	int inputWord[256] = {0};
 	int inputWordLength = 0;
 	for(int i = 0; argv[2][i] != '\0'; i++){
@@ -113,10 +123,11 @@ int main(int argc, char* argv[]) {
 		unsigned int charKey = (unsigned char)fileInMemory[i];
 		if(charKey == 13){
 			if(nextWord == false && inputWordLength == currentWordLength){
-				// TODO validate if correct				
 				char *word = getWord(inputWordLength, i , fileInMemory);
-				strcat(resultString, ", ");
-				strcat(resultString,  word);
+				if(isAnagram(inputWord, inputWordLength, word) == 0){
+					strcat(resultString, ", ");
+					strcat(resultString,  word);
+				}
 			}
 			i++;
 			nextWord = false;
